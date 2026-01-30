@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, Form, HTTPException
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
-from database import SessionLocal
-from models import User
+from .database import SessionLocal
+from .models import User
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 router = APIRouter()

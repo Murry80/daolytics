@@ -1,14 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DAOlytics - Upload Trades</title>
 </head>
 <body>
     <h2>Upload your CSV</h2>
     <form action="/upload" enctype="multipart/form-data" method="post">
-        <input type="hidden" name="user_id" value="1">
-        <input type="file" name="file" required>
+        <label for="user_id">Select User:</label>
+        <select name="user_id" id="user_id" required title="Select the user to associate the trades with">
+            {% for user in users %}
+                <option value="{{ user.id }}">{{ user.username }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <label for="file">Choose CSV file:</label>
+        <input type="file" name="file" id="file" required title="Upload your trades CSV" placeholder="Select CSV file">
+        <br><br>
         <button type="submit">Analyze</button>
     </form>
 </body>
 </html>
+
