@@ -13,19 +13,31 @@ os.makedirs("uploads", exist_ok=True)
 def seed():
     db = SessionLocal()
     try:
-        # Check if TestUser already exists
-        existing_user = db.query(User).filter(User.email == "test@daolytics.local").first()
-        if not existing_user:
-            test_user = User(
-                username="TestUser",
-                email="test@daolytics.local",
-                hashed_password=hash_password("password123")
-            )
-            db.add(test_user)
-            db.commit()
-            print("✅ TestUser created")
-        else:
-            print("ℹ️ TestUser already exists")
+        # List of test users to seed
+        users_to_add = [
+            ("TestUser", "test@daolytics.local", "password123"),
+            ("Alice", "alice@daolytics.local", "alice123"),
+            ("Bob", "bob@daolytics.local", "bob123"),
+        ]
+
+        for username, email, password in users_to_add:
+            existing_user = db.query(User).filter(User.email == email).first()
+            if not existing_user:
+                db.add(User(
+                    username=username,
+                    email=email,
+                    hashed_password=hash_password(password)
+                ))
+                print(f"✅ Created user: {username}")
+            else:
+                print(f"ℹ️ User already exists: {username}")
+
+        db.commit()
+
+        # Print total users in DB for verification
+        user_count = db.query(User).count()
+        print(f"ℹ️ Total users in DB: {user_count}")
+
     finally:
         db.close()
 

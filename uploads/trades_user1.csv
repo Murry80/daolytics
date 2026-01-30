@@ -1,0 +1,5 @@
+date,asset,type,quantity,price
+2026-01-30,BTC,buy,0.65,30000
+2026-01-30,ETH,buy,0.5,1800
+2026-03-31,BTC,sell,0.05,60000
+2026-01-31,ETH,sell,0.2,1850

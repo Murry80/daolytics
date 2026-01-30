@@ -3,27 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DAOlytics - Analysis Results</title>
+    <title>Analysis Results</title>
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
     <h2>Analysis Results</h2>
 
-    <p><strong>PnL:</strong> {{ result.get('pnl', 0.0) }}</p>
-    <p><strong>Win Rate:</strong> {{ result.get('win_rate', 0.0) }}%</p>
-
-    {% if result.get('chart') %}
-        <h3>PnL Chart</h3>
-        <img 
-            src="/static/{{ result['chart'] }}" 
-            alt="PnL Chart for the uploaded trades" 
-            width="600" 
-            title="PnL over time chart"
-        >
+    {% if result.error %}
+        <div class="error-message">{{ result.error }}</div>
     {% else %}
-        <p>No chart available.</p>
-    {% endif %}
+        <p>PnL: {{ result.pnl }}</p>
+        <p>Win Rate: {{ result.win_rate }}%</p>
 
-    <br><br>
-    <a href="/" title="Upload another CSV file">Upload Another CSV</a>
+        <h3>PnL Chart</h3>
+        <img src="/static/{{ result.chart }}" alt="PnL Chart for the uploaded trades">
+
+        <a href="/">Upload Another CSV</a>
+    {% endif %}
 </body>
 </html>
+
+
+

@@ -1,9 +1,11 @@
+# main.py
 from fastapi import FastAPI, Request, UploadFile, File, Form, Depends
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 import shutil, os
+
 from .models import User, File as FileModel
 from .auth import router as auth_router
 from .process_csv import analyze_trades
@@ -33,7 +35,7 @@ def read_root(request: Request, db: Session = Depends(get_db)):
     users = db.query(User).all()
     return templates.TemplateResponse("index.html", {"request": request, "users": users})
 
-# CSV upload route
+# CSV upload route with debug printing
 @app.post("/upload", response_class=HTMLResponse)
 async def upload_csv(
     request: Request,
@@ -48,13 +50,28 @@ async def upload_csv(
     with open(file_path, "wb") as buffer:
         buffer.write(contents)
 
-    # Analyze trades
-    result = analyze_trades(file_path, user_id)
+    # === Debug: Confirm file saved ===
+    print(f"File uploaded: {file.filename} -> {file_path}")
+
+    # Analyze trades using process_csv.py
+    try:
+        result = analyze_trades(file_path, user_id)
+    except Exception as e:
+        print(f"Error during analysis: {e}")
+        return templates.TemplateResponse(
+            "results.html",
+            {"request": request, "result": {"pnl": 0, "win_rate": 0, "chart": None, "error": str(e)}}
+        )
 
     # Save file record to DB
     new_file = FileModel(user_id=user_id, filename=file.filename, result_path=result['chart'])
     db.add(new_file)
     db.commit()
 
+    # === Debug: Show result dictionary ===
+    print("Analysis result dictionary:")
+    print(result)
+
     # Render results page
     return templates.TemplateResponse("results.html", {"request": request, "result": result})
+
