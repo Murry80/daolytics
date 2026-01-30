@@ -53,5 +53,5 @@ DAOlytics solves this by:
 1. Clone the repo:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/daolytics.git
+git clone https://github.com/Murry80/daolytics.git
 cd daolytics
