@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DAOlytics - Results</title>
+</head>
+<body>
+    <h2>Analysis Results</h2>
+    <p><strong>PnL:</strong> {{ result['pnl'] }}</p>
+    <p><strong>Win Rate:</strong> {{ result['win_rate']*100 }}%</p>
+    <img src="/{{ result['chart'] }}" alt="PnL Chart">
+</body>
+</html>
